@@ -3,16 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aureole | 全球旗艦品牌</title>
+    <title>Aureole | 全球旗艦品牌商店</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="bg-stone-950 text-stone-100 min-h-screen flex flex-col items-center justify-center p-6">
-    <div class="max-w-xl text-center space-y-6">
-        <h1 class="text-4xl font-light tracking-widest uppercase">Aureole</h1>
-        <p class="text-stone-400">全球奢華品牌與精選商品旗艦店即將正式上線。</p>
-        <div class="pt-4">
-            <a href="#shop" class="inline-block border border-stone-100 px-8 py-3 text-sm tracking-widest uppercase hover:bg-stone-100 hover:text-stone-950 transition">探索系列</a>
+<body class="bg-stone-950 text-stone-100 min-h-screen flex flex-col" x-data="shopApp()">
+
+    <!-- 頂部導覽列 -->
+    <header class="border-b border-stone-800 px-6 py-4 flex justify-between items-center sticky top-0 bg-stone-950/90 backdrop-blur z-50">
+        <h1 class="text-xl font-light tracking-widest uppercase">Aureole</h1>
+        <button @click="cartOpen = true" class="relative border border-stone-700 px-4 py-2 text-xs tracking-widest uppercase hover:bg-stone-800 transition flex items-center gap-2">
+            購物車 <span class="bg-stone-100 text-stone-950 px-1.5 py-0.5 rounded-full text-[10px] font-bold" x-text="cartCount"></span>
+        </button>
+    </header>
+
+    <!-- 英雄橫幅 (Hero) -->
+    <section class="py-16 px-6 text-center border-b border-stone-900 bg-gradient-to-b from-stone-900/50 to-stone-950">
+        <h2 class="text-3xl md:text-5xl font-light tracking-widest mb-4">2026 全球精選系列</h2>
+        <p class="text-stone-400 text-sm tracking-wide max-w-lg mx-auto">無與倫比的質感與設計，支援全球多國貨幣與安全信用卡結帳，零月費輕鬆擁有。</p>
+    </section>
+
+    <!-- 商品列表 -->
+    <main class="flex-1 max-w-7xl mx-auto px-6 py-12 w-full grid grid-cols-1 md:grid-cols-3 gap-8">
+        <template x-for="product in products" :key="product.id">
+            <div class="border border-stone-800 bg-stone-900/30 flex flex-col justify-between p-6 rounded-lg hover:border-stone-600 transition">
+                <div>
+                    <div class="bg-stone-800 h-64 rounded mb-4 flex items-center justify-center text-stone-500 text-sm tracking-widest">
+                        商品圖片預覽
+                    </div>
+                    <h3 class="text-lg font-light tracking-wide mb-1" x-text="product.name"></h3>
+                    <p class="text-stone-400 text-sm mb-4" x-text="product.priceFormatted"></p>
+                </div>
+                <button @click="addToCart(product)" class="w-full bg-stone-100 text-stone-950 py-2.5 text-xs font-medium tracking-widest uppercase hover:bg-stone-300 transition">
+                    加入購物車
+                </button>
+            </div>
+        </template>
+    </main>
+
+    <!-- 購物車抽屜 (Slide-over Cart) -->
+    <div x-show="cartOpen" class="fixed inset-0 z-50 overflow-hidden" style="display: none;">
+        <div @click="cartOpen = false" class="absolute inset-0 bg-stone-950/70 backdrop-blur-sm"></div>
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-stone-900 border-l border-stone-800 p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center border-b border-stone-800 pb-4">
+                        <h3 class="text-lg tracking-widest uppercase">您的購物車</h3>
+                        <button @click="cartOpen = false" class="text-stone-400 hover:text-stone-100">✕</button>
+                    </div>
+                    <div class="mt-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                        <template x-for="item in cart" :key="item.id">
+                            <div class="flex justify-between items-center border-b border-stone-800/50 pb-3">
+                                <div>
+                                    <h4 class="text-sm tracking-wide" x-text="item.name"></h4>
+                                    <p class="text-xs text-stone-400" x-text="item.priceFormatted + ' x ' + item.qty"></p>
+                                </div>
+                                <button @click="removeFromCart(item.id)" class="text-xs text-red-400 hover:underline">移除</button>
+                            </div>
+                        </template>
+                        <p x-show="cart.length === 0" class="text-stone-500 text-center py-12 text-sm">購物車目前是空的</p>
+                    </div>
+                </div>
+                <div class="border-t border-stone-800 pt-4 space-y-4">
+                    <div class="flex justify-between text-base font-light tracking-wide">
+                        <span>總計 (Total)</span>
+                        <span x-text="'NT$ ' + totalAmount"></span>
+                    </div>
+                    <button @click="checkout" class="w-full bg-stone-100 text-stone-950 py-3 text-xs tracking-widest uppercase hover:bg-stone-300 transition font-medium">
+                        前往安全結帳 (Stripe 模擬)
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- 頁尾 -->
+    <footer class="border-t border-stone-900 py-6 text-center text-xs text-stone-500 tracking-widest">
+        &copy; 2026 AUREOLE GLOBAL. All rights reserved.
+    </footer>
+
+    <script>
+        function shopApp() {
+            return {
+                cartOpen: false,
+                products: [
+                    { id: 1, name: 'Aureole 極簡純銀手環', price: 3800, priceFormatted: 'NT$ 3,800' },
+                    { id: 2, name: '手工植鞣真皮錢包', price: 2500, priceFormatted: 'NT$ 2,500' },
+                    { id: 3, name: '經典訂製香氛蠟燭', price: 1280, priceFormatted: 'NT$ 1,280' }
+                ],
+                cart: [],
+                get cartCount() {
+                    return this.cart.reduce((sum, item) => sum + item.qty, 0);
+                },
+                get totalAmount() {
+                    return this.cart.reduce((sum, item) => sum + (item.price * item.qty), 0).toLocaleString();
+                },
+                addToCart(product) {
+                    let existing = this.cart.find(i => i.id === product.id);
+                    if (existing) {
+                        existing.qty++;
+                    } else {
+                        this.cart.push({ ...product, qty: 1 });
+                    }
+                    this.cartOpen = true;
+                },
+                removeFromCart(id) {
+                    this.cart = this.cart.filter(i => i.id !== id);
+                },
+                checkout() {
+                    if (this.cart.length === 0) {
+                        alert('購物車是空的！');
+                        return;
+                    }
+                    alert('此為原型測試：點擊後將對接 Stripe 全球金流頁面（僅在成功下單時扣除約 2.9% 手續費，無月費）。');
+                }
+            }
+        }
+    </script>
 </body>
 </html>
