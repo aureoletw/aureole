@@ -46,13 +46,19 @@
         Complimentary Shipping on Orders Over NT$ 3,000 · Worldwide Delivery Available
     </div>
 
-    <!-- 頁面上方品牌 Banner 區塊 (包含你的專屬 Logo) -->
-    <section class="bg-white border-b border-[#E5E5E5] py-8 md:py-12 text-center">
+    <!-- 頁面上方品牌 Banner 區塊 (精緻 Logo 向量化呈現) -->
+    <section class="bg-white border-b border-[#E5E5E5] py-10 md:py-14 text-center">
         <div class="max-w-4xl mx-auto px-6 flex flex-col items-center justify-center space-y-4">
-            <!-- 你的品牌完整 Logo 圖騰 (實體約 4cm 視覺比例呈現) -->
-            <div class="w-24 md:w-28 h-24 md:h-28 overflow-hidden rounded-full border border-[#E5E5E5] bg-[#FAFAFA] flex items-center justify-center p-2 shadow-sm">
-                <!-- 這裡串接你提供的圖片連結或上傳的檔名 -->
-                <img src="https://i.imgur.com/你的圖片網址.jpg" alt="Auréole Emblem" class="w-full h-full object-contain mix-blend-multiply">
+            <!-- 品牌圖騰 SVG (重現帶翼頭盔古典徽章) -->
+            <div class="w-20 h-20 md:w-24 md:h-24 rounded-full border border-[#E5E5E5] bg-[#FAFAFA] flex items-center justify-center p-3 shadow-sm">
+                <svg class="w-full h-full text-[#0A0A0A]" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 簡化重現帶翼經典側臉輪廓 -->
+                    <path d="M48 20C42 22 36 26 33 32C30 38 30 45 32 52C34 59 39 65 42 72C44 76 45 80 47 85H53C51 78 49 73 47 68C44 60 40 54 39 47C38 41 40 35 44 30C47 26 52 23 58 22C54 21 51 20 48 20Z"/>
+                    <!-- 翅膀羽毛線條裝飾 -->
+                    <path d="M58 22C65 18 73 15 82 14C85 20 86 28 83 35C80 42 74 48 68 53C72 47 75 41 75 35C75 29 70 25 64 23C62 22 60 22 58 22Z" opacity="0.9"/>
+                    <path d="M68 53C74 48 80 42 83 35C86 42 85 50 80 57C75 64 67 70 58 74C65 67 67 60 68 53Z" opacity="0.8"/>
+                    <path d="M58 74C67 70 75 64 80 57C78 63 73 70 67 76C62 81 55 85 47 88C52 83 55 78 58 74Z" opacity="0.7"/>
+                </svg>
             </div>
             <!-- 品牌字樣 -->
             <h1 class="text-2xl md:text-3xl font-medium tracking-[0.4em] uppercase text-[#0A0A0A]">
@@ -96,8 +102,8 @@
                 <p class="text-[11px] tracking-[0.3em] uppercase text-[#666666]">
                     Edition 01 — Headwear & Wearable Objects
                 </p>
-                <!-- 確保 "Unexpected forms, made wearable." 在同一行，使用 whitespace-nowrap 或縮小字體級距 -->
-                <h2 class="text-3xl sm:text-4xl md:text-5xl font-light tracking-[0.04em] leading-[1.2] uppercase text-[#0A0A0A] whitespace-nowrap overflow-x-auto pb-2">
+                <!-- 確保標題強制同一行 -->
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-light tracking-[0.04em] leading-[1.2] uppercase text-[#0A0A0A] whitespace-nowrap overflow-x-auto pb-2">
                     “Unexpected forms, made wearable.”
                 </h2>
                 <p class="text-sm md:text-base font-light text-[#666666] leading-relaxed max-w-lg">
