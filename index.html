@@ -46,23 +46,18 @@
         Complimentary Shipping on Orders Over NT$ 3,000 · Worldwide Delivery Available
     </div>
 
-    <!-- 頁面上方品牌 Banner 區塊 (內嵌你的專屬 Logo 設計與統一英文副標題) -->
+    <!-- 頁面上方品牌 Banner 區塊 (使用你上傳的真實 Logo) -->
     <section class="bg-white border-b border-[#E5E5E5] py-10 md:py-14 text-center">
         <div class="max-w-4xl mx-auto px-6 flex flex-col items-center justify-center space-y-4">
-            <!-- 品牌完整 Logo 呈現 (約 4cm 視覺比例之精緻橫幅 Banner) -->
-            <div class="w-32 md:w-36 h-28 md:h-32 flex items-center justify-center">
-                <svg class="w-full h-full text-[#0A0A0A]" viewBox="0 0 350 260" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <!-- 墨丘利帶翼頭盔側臉輪廓 -->
-                    <path d="M175 35C158 40 142 50 134 64C126 78 126 95 131 110C136 125 147 138 155 152C160 161 163 170 167 180H193C189 165 184 154 180 143C172 127 163 114 160 99C157 85 161 72 170 61C177 52 189 45 204 42C193 39 184 36 175 35Z"/>
-                    <!-- 翅膀羽毛細節 -->
-                    <path d="M204 42C226 31 251 23 277 21C286 35 289 53 281 69C273 85 254 99 235 111C247 97 257 83 256 69C255 55 239 45 221 40C215 39 209 40 204 42Z" opacity="0.95"/>
-                    <path d="M235 111C254 99 273 85 281 69C290 87 287 108 271 125C255 142 230 156 204 167C223 151 230 132 235 111Z" opacity="0.9"/>
-                    <path d="M204 167C230 156 255 142 271 125C264 140 248 157 230 171C213 184 192 193 170 200C185 187 195 177 204 167Z" opacity="0.85"/>
-                    <!-- 底部 AURÉOLE 字樣 -->
-                    <text x="50%" y="240" font-family="Montserrat, sans-serif" font-size="28" font-weight="500" letter-spacing="8" text-anchor="middle" fill="#0A0A0A">AURÉOLE</text>
-                </svg>
+            <!-- 品牌圖騰真實圖片 -->
+            <div class="w-24 h-24 md:w-28 md:h-28 rounded-full border border-[#E5E5E5] bg-[#FAFAFA] flex items-center justify-center p-2 shadow-sm overflow-hidden">
+                <img src="https://raw.githubusercontent.com/aureoletw/aureole/01e225b87da45b6b16c5b3cf49de4d9b3d8641b0/S__335478799.jpg" alt="Auréole Emblem" class="w-full h-full object-cover mix-blend-multiply">
             </div>
-            <p class="text-[11px] tracking-[0.3em] uppercase text-[#666666] pt-2">
+            <!-- 品牌字樣 -->
+            <h1 class="text-2xl md:text-3xl font-medium tracking-[0.4em] uppercase text-[#0A0A0A]">
+                AURÉOLE
+            </h1>
+            <p class="text-[11px] tracking-[0.3em] uppercase text-[#666666]">
                 Wearable Art & Headwear · Handcrafted Excellence · Taipei, Taiwan
             </p>
         </div>
@@ -71,19 +66,14 @@
     <!-- 導覽列 -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-[#E5E5E5]">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <!-- 左側選單 -->
             <nav class="hidden md:flex space-x-8 text-xs tracking-[0.2em] uppercase">
                 <a href="#collection" class="hover:opacity-50 transition">Collection</a>
                 <a href="#about" class="hover:opacity-50 transition">Philosophy</a>
                 <a href="#contact" class="hover:opacity-50 transition">Contact</a>
             </nav>
-
-            <!-- 中間快速識別 -->
             <a href="#" class="text-xs tracking-[0.3em] uppercase font-medium md:hidden">
                 AURÉOLE
             </a>
-
-            <!-- 右側購物車按鈕 -->
             <div class="flex items-center space-x-6 ml-auto">
                 <button @click="cartOpen = true" class="text-xs tracking-[0.2em] uppercase flex items-center space-x-2 hover:opacity-50 transition">
                     <span>Bag</span>
@@ -100,7 +90,6 @@
                 <p class="text-[11px] tracking-[0.3em] uppercase text-[#666666]">
                     Edition 01 — Headwear & Wearable Objects
                 </p>
-                <!-- 鎖定同一行展示的大標題 -->
                 <h2 class="text-2xl sm:text-3xl md:text-4xl font-light tracking-[0.04em] leading-[1.2] uppercase text-[#0A0A0A] whitespace-nowrap overflow-x-auto pb-2">
                     “Unexpected forms, made wearable.”
                 </h2>
@@ -128,7 +117,7 @@
         </div>
     </section>
 
-    <!-- 商品展示區 (Collection) -->
+    <!-- 商品展示區 (Collection - 精確 3 個款式三宮格) -->
     <section id="collection" class="py-24 border-b border-[#E5E5E5]">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-[#E5E5E5]">
@@ -141,8 +130,8 @@
                 </p>
             </div>
 
-            <!-- 商品網格 -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-14">
+            <!-- 3 個商品的網格排版 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-14">
                 <template x-for="product in products" :key="product.id">
                     <div class="group flex flex-col">
                         <!-- 商品圖片 -->
@@ -221,18 +210,13 @@
 
     <!-- 側邊滑出式購物車 (Slide-over Bag) -->
     <div x-show="cartOpen" x-cloak class="fixed inset-0 z-50 overflow-hidden">
-        <!-- 背景遮罩 -->
         <div @click="cartOpen = false" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-opacity"></div>
-
-        <!-- 購物車面板 -->
         <div class="fixed inset-y-0 right-0 max-w-md w-full bg-white border-l border-[#E5E5E5] flex flex-col justify-between">
-            <!-- 購物車標題 -->
             <div class="p-6 border-b border-[#E5E5E5] flex items-center justify-between">
                 <h2 class="text-xs font-medium tracking-[0.25em] uppercase">Shopping Bag (<span x-text="totalItems"></span>)</h2>
                 <button @click="cartOpen = false" class="text-xs tracking-[0.2em] uppercase hover:opacity-50">Close [✕]</button>
             </div>
 
-            <!-- 購物車商品清單 -->
             <div class="flex-1 overflow-y-auto p-6 space-y-6">
                 <template x-if="cart.length === 0">
                     <div class="h-full flex flex-col items-center justify-center text-center py-20">
@@ -264,7 +248,6 @@
                 </template>
             </div>
 
-            <!-- 購物車底部結帳區（預留雙金流按鈕） -->
             <div x-show="cart.length > 0" class="p-6 border-t border-[#E5E5E5] bg-[#FAFAFA] space-y-4">
                 <div class="flex justify-between items-center text-sm tracking-[0.15em] uppercase">
                     <span>Subtotal</span>
@@ -272,12 +255,10 @@
                 </div>
                 <p class="text-[11px] text-[#666666] font-light">請選擇您的結帳方式（台灣本地或海外國際）：</p>
 
-                <!-- 綠界結帳按鈕 -->
                 <button @click="checkoutECPay()" class="w-full bg-[#0A0A0A] text-white border border-[#0A0A0A] py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-white hover:text-[#0A0A0A] transition duration-300">
                     Taiwan Checkout · 綠界科技 (ECPay)
                 </button>
 
-                <!-- PayPal 結帳按鈕 -->
                 <button @click="checkoutPayPal()" class="w-full bg-white text-[#0A0A0A] border border-[#0A0A0A] py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-[#0A0A0A] hover:text-white transition duration-300">
                     International Checkout · PayPal
                 </button>
@@ -285,7 +266,7 @@
         </div>
     </div>
 
-    <!-- 網站互動與商品資料腳本 -->
+    <!-- 網站互動與 3 個精選商品資料 -->
     <script>
         function storeApp() {
             return {
@@ -310,19 +291,11 @@
                     },
                     {
                         id: 3,
-                        category: 'Headwear',
+                        category: 'Wearable Object',
                         name: 'Raw Edge Bucket Hat',
                         price: 1980,
                         description: '重磅水洗帆布漁夫帽，不收邊工藝展現自然隨性的日常質感。',
                         image: 'https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?auto=format&fit=crop&w=800&q=80'
-                    },
-                    {
-                        id: 4,
-                        category: 'Wearable Object',
-                        name: 'Halo Ribbed Knit Beanie',
-                        price: 1480,
-                        description: '美麗諾羊毛羅紋短毛帽，貼合頭型比例，呈現低調內斂光澤。',
-                        image: 'https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?auto=format&fit=crop&w=800&q=80'
                     }
                 ],
                 get totalItems() {
