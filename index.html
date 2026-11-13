@@ -1,105 +1,297 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aureole | 全球旗艦品牌商店</title>
+    <title>AUREOLE | Minimalist Jewelry & Objects</title>
+    <!-- Google Fonts: Montserrat & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Montserrat"', '"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        galleryWhite: '#FFFFFF',
+                        galleryGray: '#F5F5F5',
+                        galleryBorder: '#E5E5E5',
+                        galleryBlack: '#0A0A0A',
+                        galleryMuted: '#666666',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FFFFFF;
+            color: #0A0A0A;
+            -webkit-font-smoothing: antialiased;
+        }
+        [x-cloak] { display: none !important; }
+    </style>
 </head>
-<body class="bg-stone-950 text-stone-100 min-h-screen flex flex-col" x-data="shopApp()">
+<body x-data="storeApp()" class="font-sans selection:bg-black selection:text-white">
 
-    <!-- 頂部導覽列 -->
-    <header class="border-b border-stone-800 px-6 py-4 flex justify-between items-center sticky top-0 bg-stone-950/90 backdrop-blur z-50">
-        <h1 class="text-xl font-light tracking-widest uppercase">Aureole</h1>
-        <button @click="cartOpen = true" class="relative border border-stone-700 px-4 py-2 text-xs tracking-widest uppercase hover:bg-stone-800 transition flex items-center gap-2">
-            購物車 <span class="bg-stone-100 text-stone-950 px-1.5 py-0.5 rounded-full text-[10px] font-bold" x-text="cartCount"></span>
-        </button>
-    </header>
+    <!-- 頂部公告欄 -->
+    <div class="bg-[#0A0A0A] text-white text-[11px] tracking-[0.2em] uppercase text-center py-2.5 px-4">
+        Complimentary Shipping on Orders Over NT$ 3,000 · Worldwide Delivery Available
+    </div>
 
-    <!-- 英雄橫幅 (Hero) -->
-    <section class="py-16 px-6 text-center border-b border-stone-900 bg-gradient-to-b from-stone-900/50 to-stone-950">
-        <h2 class="text-3xl md:text-5xl font-light tracking-widest mb-4">2026 全球精選系列</h2>
-        <p class="text-stone-400 text-sm tracking-wide max-w-lg mx-auto">無與倫比的質感與設計，支援全球多國貨幣與安全信用卡結帳，零月費輕鬆擁有。</p>
-    </section>
+    <!-- 導覽列 -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-[#E5E5E5]">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- 左側選單 -->
+            <nav class="hidden md:flex space-x-8 text-xs tracking-[0.2em] uppercase">
+                <a href="#collection" class="hover:opacity-50 transition">Collection</a>
+                <a href="#about" class="hover:opacity-50 transition">Philosophy</a>
+                <a href="#contact" class="hover:opacity-50 transition">Contact</a>
+            </nav>
 
-    <!-- 商品列表 -->
-    <main class="flex-1 max-w-7xl mx-auto px-6 py-12 w-full grid grid-cols-1 md:grid-cols-3 gap-8">
-        <template x-for="product in products" :key="product.id">
-            <div class="border border-stone-800 bg-stone-900/30 flex flex-col justify-between p-6 rounded-lg hover:border-stone-600 transition">
-                <div>
-                    <div class="bg-stone-800 h-64 rounded mb-4 flex items-center justify-center text-stone-500 text-sm tracking-widest">
-                        商品圖片預覽
-                    </div>
-                    <h3 class="text-lg font-light tracking-wide mb-1" x-text="product.name"></h3>
-                    <p class="text-stone-400 text-sm mb-4" x-text="product.priceFormatted"></p>
-                </div>
-                <button @click="addToCart(product)" class="w-full bg-stone-100 text-stone-950 py-2.5 text-xs font-medium tracking-widest uppercase hover:bg-stone-300 transition">
-                    加入購物車
+            <!-- 品牌 Logo -->
+            <a href="#" class="text-xl md:text-2xl font-medium tracking-[0.35em] uppercase text-[#0A0A0A]">
+                AUREOLE
+            </a>
+
+            <!-- 右側購物車按鈕 -->
+            <div class="flex items-center space-x-6">
+                <button @click="cartOpen = true" class="text-xs tracking-[0.2em] uppercase flex items-center space-x-2 hover:opacity-50 transition">
+                    <span>Bag</span>
+                    <span class="bg-[#0A0A0A] text-white text-[10px] w-5 h-5 flex items-center justify-center font-medium" x-text="totalItems">0</span>
                 </button>
             </div>
-        </template>
-    </main>
+        </div>
+    </header>
 
-    <!-- 購物車抽屜 (Slide-over Cart) -->
-    <div x-show="cartOpen" class="fixed inset-0 z-50 overflow-hidden" style="display: none;">
-        <div @click="cartOpen = false" class="absolute inset-0 bg-stone-950/70 backdrop-blur-sm"></div>
-        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
-            <div class="w-screen max-w-md bg-stone-900 border-l border-stone-800 p-6 flex flex-col justify-between">
+    <!-- 首頁主視覺 (Hero Section) -->
+    <section class="border-b border-[#E5E5E5]">
+        <div class="max-w-7xl mx-auto px-6 py-24 md:py-36 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+            <div class="md:col-span-7 space-y-8">
+                <p class="text-[11px] tracking-[0.3em] uppercase text-[#666666]">
+                    Collection 01 — Architectural Forms
+                </p>
+                <h1 class="text-4xl md:text-6xl font-light tracking-[0.08em] leading-[1.15] uppercase text-[#0A0A0A]">
+                    Pure Silhouette.<br>Timeless Aura.
+                </h1>
+                <p class="text-sm md:text-base font-light text-[#666666] leading-relaxed max-w-lg">
+                    以建築幾何線條與純粹金屬光澤為靈感，剔除多餘裝飾，打造日常與正式場合皆能俐落駕馭的極簡飾品系列。
+                </p>
+                <div class="pt-2 flex flex-wrap gap-4">
+                    <a href="#collection" class="bg-[#0A0A0A] text-white border border-[#0A0A0A] px-8 py-4 text-xs tracking-[0.25em] uppercase hover:bg-white hover:text-[#0A0A0A] transition duration-300">
+                        Explore Collection
+                    </a>
+                    <a href="#about" class="bg-white text-[#0A0A0A] border border-[#E5E5E5] px-8 py-4 text-xs tracking-[0.25em] uppercase hover:border-[#0A0A0A] transition duration-300">
+                        Our Story
+                    </a>
+                </div>
+            </div>
+
+            <!-- 主視覺形象圖框 -->
+            <div class="md:col-span-5">
+                <div class="aspect-[3/4] bg-[#F5F5F5] border border-[#E5E5E5] overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=900&q=80" 
+                         alt="Aureole Minimalist Jewelry" 
+                         class="w-full h-full object-cover grayscale contrast-105 hover:scale-105 transition duration-700">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 商品展示區 (Collection) -->
+    <section id="collection" class="py-24 border-b border-[#E5E5E5]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-[#E5E5E5]">
                 <div>
-                    <div class="flex justify-between items-center border-b border-stone-800 pb-4">
-                        <h3 class="text-lg tracking-widest uppercase">您的購物車</h3>
-                        <button @click="cartOpen = false" class="text-stone-400 hover:text-stone-100">✕</button>
-                    </div>
-                    <div class="mt-6 space-y-4 max-h-[60vh] overflow-y-auto">
-                        <template x-for="item in cart" :key="item.id">
-                            <div class="flex justify-between items-center border-b border-stone-800/50 pb-3">
-                                <div>
-                                    <h4 class="text-sm tracking-wide" x-text="item.name"></h4>
-                                    <p class="text-xs text-stone-400" x-text="item.priceFormatted + ' x ' + item.qty"></p>
-                                </div>
-                                <button @click="removeFromCart(item.id)" class="text-xs text-red-400 hover:underline">移除</button>
+                    <p class="text-[11px] tracking-[0.3em] uppercase text-[#666666] mb-2">Selected Pieces</p>
+                    <h2 class="text-2xl md:text-3xl font-normal tracking-[0.15em] uppercase">The Collection</h2>
+                </div>
+                <p class="text-xs tracking-[0.15em] uppercase text-[#666666] mt-4 md:mt-0">
+                    Showing <span x-text="products.length"></span> Editions
+                </p>
+            </div>
+
+            <!-- 商品網格 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-14">
+                <template x-for="product in products" :key="product.id">
+                    <div class="group flex flex-col">
+                        <!-- 商品圖片 -->
+                        <div class="aspect-[3/4] bg-[#F5F5F5] mb-5 overflow-hidden relative border border-transparent group-hover:border-[#0A0A0A] transition duration-300">
+                            <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                            <button @click="addToCart(product)" 
+                                    class="absolute bottom-0 inset-x-0 bg-[#0A0A0A] text-white py-3.5 text-[11px] tracking-[0.25em] uppercase opacity-0 group-hover:opacity-100 transition duration-300">
+                                + Add to Bag
+                            </button>
+                        </div>
+
+                        <!-- 商品資訊 -->
+                        <div class="flex justify-between items-start gap-2">
+                            <div>
+                                <p class="text-[10px] tracking-[0.2em] uppercase text-[#666666] mb-1" x-text="product.category"></p>
+                                <h3 class="text-sm font-medium tracking-[0.08em] uppercase text-[#0A0A0A]" x-text="product.name"></h3>
                             </div>
-                        </template>
-                        <p x-show="cart.length === 0" class="text-stone-500 text-center py-12 text-sm">購物車目前是空的</p>
+                            <span class="text-sm font-normal tracking-wider text-[#0A0A0A]" x-text="'NT$ ' + product.price.toLocaleString()"></span>
+                        </div>
+                        <p class="text-xs font-light text-[#666666] mt-2 line-clamp-2" x-text="product.description"></p>
                     </div>
-                </div>
-                <div class="border-t border-stone-800 pt-4 space-y-4">
-                    <div class="flex justify-between text-base font-light tracking-wide">
-                        <span>總計 (Total)</span>
-                        <span x-text="'NT$ ' + totalAmount"></span>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- 品牌理念 (Philosophy) -->
+    <section id="about" class="py-24 border-b border-[#E5E5E5] bg-[#FAFAFA]">
+        <div class="max-w-4xl mx-auto px-6 text-center space-y-6">
+            <p class="text-[11px] tracking-[0.3em] uppercase text-[#666666]">Brand Philosophy</p>
+            <h2 class="text-2xl md:text-3xl font-light tracking-[0.15em] uppercase leading-relaxed">
+                "Less Ornament, More Presence."
+            </h2>
+            <p class="text-sm font-light text-[#666666] leading-loose max-w-2xl mx-auto">
+                AUREOLE 專注於純粹比例與材質本質。每一件作品皆經過精密拋光與結構平衡測試，讓配戴者在無需言語的情況下，自然展現沉穩而鮮明的個人氣場。
+            </p>
+        </div>
+    </section>
+
+    <!-- 頁尾 (Footer) -->
+    <footer id="contact" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+            <div>
+                <div class="text-lg font-medium tracking-[0.35em] uppercase mb-2">AUREOLE</div>
+                <p class="text-xs text-[#666666] font-light tracking-wider">Minimalist Jewelry & Contemporary Objects · Taipei, Taiwan</p>
+            </div>
+            <div class="flex space-x-8 text-xs tracking-[0.2em] uppercase text-[#666666]">
+                <a href="#" class="hover:text-[#0A0A0A] transition">Instagram</a>
+                <a href="mailto:contact@aureole.tw" class="hover:text-[#0A0A0A] transition">Email</a>
+                <a href="#" class="hover:text-[#0A0A0A] transition">Shipping & Returns</a>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-[#E5E5E5] text-[11px] tracking-[0.15em] text-[#666666] uppercase flex justify-between">
+            <span>© 2026 AUREOLE. All Rights Reserved.</span>
+            <span>Taiwan & Worldwide</span>
+        </div>
+    </footer>
+
+    <!-- 側邊滑出式購物車 (Slide-over Bag) -->
+    <div x-show="cartOpen" x-cloak class="fixed inset-0 z-50 overflow-hidden">
+        <!-- 背景遮罩 -->
+        <div @click="cartOpen = false" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] transition-opacity"></div>
+
+        <!-- 購物車面板 -->
+        <div class="fixed inset-y-0 right-0 max-w-md w-full bg-white border-l border-[#E5E5E5] flex flex-col justify-between">
+            <!-- 購物車標題 -->
+            <div class="p-6 border-b border-[#E5E5E5] flex items-center justify-between">
+                <h2 class="text-xs font-medium tracking-[0.25em] uppercase">Shopping Bag (<span x-text="totalItems"></span>)</h2>
+                <button @click="cartOpen = false" class="text-xs tracking-[0.2em] uppercase hover:opacity-50">Close [✕]</button>
+            </div>
+
+            <!-- 購物車商品清單 -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                <template x-if="cart.length === 0">
+                    <div class="h-full flex flex-col items-center justify-center text-center py-20">
+                        <p class="text-xs tracking-[0.2em] uppercase text-[#666666] mb-4">Your bag is currently empty.</p>
+                        <button @click="cartOpen = false" class="border border-[#0A0A0A] px-6 py-3 text-[11px] tracking-[0.2em] uppercase hover:bg-[#0A0A0A] hover:text-white transition">
+                            Continue Shopping
+                        </button>
                     </div>
-                    <button @click="checkout" class="w-full bg-stone-100 text-stone-950 py-3 text-xs tracking-widest uppercase hover:bg-stone-300 transition font-medium">
-                        前往安全結帳 (Stripe 模擬)
-                    </button>
+                </template>
+
+                <template x-for="item in cart" :key="item.id">
+                    <div class="flex gap-4 pb-6 border-b border-[#E5E5E5]">
+                        <img :src="item.image" :alt="item.name" class="w-20 h-24 object-cover bg-[#F5F5F5] border border-[#E5E5E5]">
+                        <div class="flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between">
+                                    <h4 class="text-xs font-medium tracking-[0.1em] uppercase" x-text="item.name"></h4>
+                                    <button @click="removeFromCart(item.id)" class="text-[11px] text-[#666666] hover:text-black">Remove</button>
+                                </div>
+                                <p class="text-xs text-[#666666] mt-1" x-text="'NT$ ' + item.price.toLocaleString()"></p>
+                            </div>
+                            <div class="flex items-center border border-[#E5E5E5] w-fit">
+                                <button @click="updateQty(item.id, -1)" class="px-2.5 py-1 text-xs hover:bg-[#F5F5F5]">-</button>
+                                <span class="px-3 py-1 text-xs" x-text="item.qty"></span>
+                                <button @click="updateQty(item.id, 1)" class="px-2.5 py-1 text-xs hover:bg-[#F5F5F5]">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- 購物車底部結帳區（預留雙金流按鈕） -->
+            <div x-show="cart.length > 0" class="p-6 border-t border-[#E5E5E5] bg-[#FAFAFA] space-y-4">
+                <div class="flex justify-between items-center text-sm tracking-[0.15em] uppercase">
+                    <span>Subtotal</span>
+                    <span class="font-medium" x-text="'NT$ ' + totalAmount.toLocaleString()"></span>
                 </div>
+                <p class="text-[11px] text-[#666666] font-light">請選擇您的結帳方式（台灣本地或海外國際）：</p>
+
+                <!-- 綠界結帳按鈕 -->
+                <button @click="checkoutECPay()" class="w-full bg-[#0A0A0A] text-white border border-[#0A0A0A] py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-white hover:text-[#0A0A0A] transition duration-300">
+                    Taiwan Checkout · 綠界科技 (ECPay)
+                </button>
+
+                <!-- PayPal 結帳按鈕 -->
+                <button @click="checkoutPayPal()" class="w-full bg-white text-[#0A0A0A] border border-[#0A0A0A] py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-[#0A0A0A] hover:text-white transition duration-300">
+                    International Checkout · PayPal
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- 頁尾 -->
-    <footer class="border-t border-stone-900 py-6 text-center text-xs text-stone-500 tracking-widest">
-        &copy; 2026 AUREOLE GLOBAL. All rights reserved.
-    </footer>
-
+    <!-- 網站互動與商品資料腳本 -->
     <script>
-        function shopApp() {
+        function storeApp() {
             return {
                 cartOpen: false,
-                products: [
-                    { id: 1, name: 'Aureole 極簡純銀手環', price: 3800, priceFormatted: 'NT$ 3,800' },
-                    { id: 2, name: '手工植鞣真皮錢包', price: 2500, priceFormatted: 'NT$ 2,500' },
-                    { id: 3, name: '經典訂製香氛蠟燭', price: 1280, priceFormatted: 'NT$ 1,280' }
-                ],
                 cart: [],
-                get cartCount() {
+                products: [
+                    {
+                        id: 1,
+                        category: 'Necklace',
+                        name: 'Monolith Bar Pendant',
+                        price: 2480,
+                        description: '極簡幾何方柱吊墜，316L 醫療級精鋼鏡面拋光處理。',
+                        image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80'
+                    },
+                    {
+                        id: 2,
+                        category: 'Ring',
+                        name: 'Axis Signet Ring',
+                        price: 1980,
+                        description: '建築感平頂印章戒，俐落切面展現低調冷冽光澤。',
+                        image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=800&q=80'
+                    },
+                    {
+                        id: 3,
+                        category: 'Bracelet',
+                        name: 'Linear Curb Chain',
+                        price: 2280,
+                        description: '高密度扁平古巴鍊條手鍊，貼合手腕弧度，單戴或疊搭皆宜。',
+                        image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=800&q=80'
+                    },
+                    {
+                        id: 4,
+                        category: 'Earrings',
+                        name: 'Eclipse Hoop Studs',
+                        price: 1680,
+                        description: '無接縫圓環耳扣設計，純粹弧線勾勒現代輪廓。',
+                        image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80'
+                    }
+                ],
+                get totalItems() {
                     return this.cart.reduce((sum, item) => sum + item.qty, 0);
                 },
                 get totalAmount() {
-                    return this.cart.reduce((sum, item) => sum + (item.price * item.qty), 0).toLocaleString();
+                    return this.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
                 },
                 addToCart(product) {
-                    let existing = this.cart.find(i => i.id === product.id);
+                    const existing = this.cart.find(i => i.id === product.id);
                     if (existing) {
                         existing.qty++;
                     } else {
@@ -107,15 +299,26 @@
                     }
                     this.cartOpen = true;
                 },
+                updateQty(id, delta) {
+                    const item = this.cart.find(i => i.id === id);
+                    if (!item) return;
+                    item.qty += delta;
+                    if (item.qty <= 0) {
+                        this.removeFromCart(id);
+                    }
+                },
                 removeFromCart(id) {
                     this.cart = this.cart.filter(i => i.id !== id);
                 },
-                checkout() {
-                    if (this.cart.length === 0) {
-                        alert('購物車是空的！');
-                        return;
-                    }
-                    alert('此為原型測試：點擊後將對接 Stripe 全球金流頁面（僅在成功下單時扣除約 2.9% 手續費，無月費）。');
+                checkoutECPay() {
+                    // 等你拿到綠界收款連結後，將下方引號內的網址替換掉即可
+                    alert('即將前往綠界科技 ECPay 結帳頁面（請先在程式碼中填入您的綠界收款連結）');
+                    // window.location.href = 'https://p.ecpay.com.tw/你的綠界連結';
+                },
+                checkoutPayPal() {
+                    // 等你拿到 PayPal 收款連結後，將下方引號內的網址替換掉即可
+                    alert('即將前往 PayPal 國際結帳頁面（請先在程式碼中填入您的 PayPal 收款連結）');
+                    // window.location.href = 'https://www.paypal.com/ncp/payment/你的PayPal連結';
                 }
             }
         }
