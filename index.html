@@ -82,7 +82,6 @@
                 <p class="text-[11px] tracking-[0.3em] uppercase text-[#666666]">
                     Edition 01 — Headwear & Wearable Objects
                 </p>
-                <!-- 精準縮小字級，確保在各種螢幕皆能「完整一行、無需滑動」呈現 -->
                 <h2 class="text-[15px] sm:text-xl md:text-[21px] lg:text-[26px] font-light tracking-[0.04em] leading-snug uppercase text-[#0A0A0A] whitespace-nowrap">
                     “Unexpected forms, made wearable.”
                 </h2>
@@ -110,7 +109,7 @@
         </div>
     </section>
 
-    <!-- 商品展示區 (Collection - 3 個款式三宮格) -->
+    <!-- 商品展示區 (Collection - 3 個款式三宮格，純黑預留畫面) -->
     <section id="collection" class="py-24 border-b border-[#E5E5E5]">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-[#E5E5E5]">
@@ -127,11 +126,16 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-14">
                 <template x-for="product in products" :key="product.id">
                     <div class="group flex flex-col">
-                        <!-- 商品圖片 -->
-                        <div class="aspect-[3/4] bg-[#F5F5F5] mb-5 overflow-hidden relative border border-transparent group-hover:border-[#0A0A0A] transition duration-300">
-                            <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                        <!-- 商品圖片框（未放照片時顯示純黑極簡預留畫面） -->
+                        <div class="aspect-[3/4] bg-[#0A0A0A] mb-5 overflow-hidden relative border border-[#0A0A0A] flex items-center justify-center">
+                            <template x-if="product.image">
+                                <img :src="product.image" :alt="product.name" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                            </template>
+                            <template x-if="!product.image">
+                                <span class="text-white/40 text-[10px] tracking-[0.35em] uppercase" x-text="'Edition 0' + product.id"></span>
+                            </template>
                             <button @click="addToCart(product)" 
-                                    class="absolute bottom-0 inset-x-0 bg-[#0A0A0A] text-white py-3.5 text-[11px] tracking-[0.25em] uppercase opacity-0 group-hover:opacity-100 transition duration-300">
+                                    class="absolute bottom-0 inset-x-0 bg-white text-[#0A0A0A] border-t border-[#0A0A0A] py-3.5 text-[11px] tracking-[0.25em] uppercase opacity-0 group-hover:opacity-100 transition duration-300">
                                 + Add to Bag
                             </button>
                         </div>
@@ -222,7 +226,14 @@
 
                 <template x-for="item in cart" :key="item.id">
                     <div class="flex gap-4 pb-6 border-b border-[#E5E5E5]">
-                        <img :src="item.image" :alt="item.name" class="w-20 h-24 object-cover bg-[#F5F5F5] border border-[#E5E5E5]">
+                        <div class="w-20 h-24 bg-[#0A0A0A] border border-[#E5E5E5] flex-shrink-0 overflow-hidden flex items-center justify-center">
+                            <template x-if="item.image">
+                                <img :src="item.image" :alt="item.name" class="w-full h-full object-cover">
+                            </template>
+                            <template x-if="!item.image">
+                                <span class="text-white/50 text-[8px] tracking-[0.2em] uppercase" x-text="'0' + item.id"></span>
+                            </template>
+                        </div>
                         <div class="flex-1 flex flex-col justify-between">
                             <div>
                                 <div class="flex justify-between">
@@ -259,7 +270,7 @@
         </div>
     </div>
 
-    <!-- 網站互動與 3 個精選商品資料 -->
+    <!-- 網站互動與 3 個精選商品資料（image 欄位留空即自動顯示純黑畫面，日後填入 GitHub Raw 網址即可顯示獨照） -->
     <script>
         function storeApp() {
             return {
@@ -272,7 +283,7 @@
                         name: 'Sculpted Wool Fedora',
                         price: 2680,
                         description: '建築感寬簷羊毛呢帽，立體帽冠線條勾勒純粹輪廓。',
-                        image: 'https://images.unsplash.com/photo-1514327605112-b887c0e61c0a?auto=format&fit=crop&w=800&q=80'
+                        image: ''
                     },
                     {
                         id: 2,
@@ -280,7 +291,7 @@
                         name: 'Monolith Structured Cap',
                         price: 1680,
                         description: '高磅數斜紋純棉六片帽，極簡無標設計與霧黑金屬調節扣。',
-                        image: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=800&q=80'
+                        image: ''
                     },
                     {
                         id: 3,
@@ -288,7 +299,7 @@
                         name: 'Raw Edge Bucket Hat',
                         price: 1980,
                         description: '重磅水洗帆布漁夫帽，不收邊工藝展現自然隨性的日常質感。',
-                        image: 'https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?auto=format&fit=crop&w=800&q=80'
+                        image: ''
                     }
                 ],
                 get totalItems() {
